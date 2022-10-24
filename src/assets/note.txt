@@ -1,0 +1,12 @@
+{
+    "username_or_email" : "gmail@gmail.com",
+    "password" : "12345678",
+    "email" : "gmail@gmail.com"
+}
+
+{
+    "name" :"namaTesst",
+    "username" : "Username",
+    "email" : "gmail@gmail.com",
+    "password" : "12345678"
+}

@@ -1,0 +1,42 @@
+<div class="registerContainer">
+  <p-card>
+    <form [formGroup]="registerForm">
+      <div class="p-grid p-fluid">
+        <div>
+          <h5>Username</h5>
+          <input type="text" pInputText formControlName="username" />
+          <!-- <input type="text" pInputText [(ngModel)]="value1" /> -->
+        </div>
+        <div>
+          <h5>Email</h5>
+          <input type="text" pInputText formControlName="username" />
+          <!-- <input type="text" pInputText [(ngModel)]="value1" /> -->
+        </div>
+        <div>
+          <h5>Nama</h5>
+          <input type="text" pInputText formControlName="username" />
+          <!-- <input type="text" pInputText [(ngModel)]="value1" /> -->
+        </div>
+
+        <h5>Password</h5>
+        <!-- <p-password [(ngModel)]="value3" [toggleMask]="true"></p-password> -->
+        <p-password
+          [toggleMask]="true"
+          formControlName="password"
+          [feedback]="false"
+        ></p-password>
+
+        <h5>Role</h5>
+
+        <div class="selectContainer">
+          <select id="registerDropDown" formControlName="role">
+            <option class="dropOption" [ngValue]="1">Pemesan</option>
+            <option class="dropOption" [ngValue]="2">Pembeli</option>
+          </select>
+        </div>
+
+        <p-button label="Submit" (click)="submitRegister()"></p-button>
+      </div>
+    </form>
+  </p-card>
+</div>
