@@ -2,6 +2,20 @@
   margin-bottom: 1.67em;
 }
 .loginContainer {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
   max-width: 500px;
   margin: auto;
+}
+.title {
+  text-align: center;
+  font-size: 3rem;
+  color: #19345e;
+}
+.cardContainer {
+  width: 100%;
+}
+.smallerText {
+  font-size: 1.5rem;
 }
