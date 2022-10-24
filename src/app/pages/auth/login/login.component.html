@@ -1,21 +1,32 @@
 <div class="loginContainer">
-  <p-card>
-    <form [formGroup]="loginForm">
-      <div class="p-grid p-fluid">
-        <div>
-          <h5>Username atau Email</h5>
-          <input type="text" pInputText formControlName="username" />
+  <div class="cardContainer">
+    <p-card>
+      <form [formGroup]="loginForm">
+        <div class="p-grid p-fluid">
+          <div class="welcome">
+            <h1 class="title">
+              <i class="fa-solid fa-clipboard-list"></i>PeBe
+            </h1>
+            <h3>
+              Selamat datang di PeBe Management Sistem, silahkan login terlebih
+              dahulu
+            </h3>
+          </div>
+          <div>
+            <h5>Username atau Email</h5>
+            <input type="text" pInputText formControlName="username" />
+          </div>
+          <h5>Password</h5>
+          <div class="loginPassword">
+            <p-password
+              [toggleMask]="true"
+              formControlName="password"
+              [feedback]="false"
+            ></p-password>
+          </div>
+          <p-button label="Submit" (click)="submitLogin()"></p-button>
         </div>
-        <h5>Password</h5>
-        <div class="loginPassword">
-          <p-password
-            [toggleMask]="true"
-            formControlName="password"
-            [feedback]="false"
-          ></p-password>
-        </div>
-        <p-button label="Submit" (click)="submitLogin()"></p-button>
-      </div>
-    </form>
-  </p-card>
+      </form>
+    </p-card>
+  </div>
 </div>

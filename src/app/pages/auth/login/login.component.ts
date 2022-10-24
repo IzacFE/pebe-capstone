@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 
 import { Subject, takeUntil, switchMap } from 'rxjs';
+import { LoginmockingService } from 'src/app/services/mocking/loginmocking.service';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,11 @@ export class LoginComponent implements OnInit {
   });
   private ngUnsubsribe: Subject<any> = new Subject();
 
-  constructor(private router: Router, private messageService: MessageService) {}
+  constructor(
+    private router: Router,
+    private messageService: MessageService,
+    private loginMocking: LoginmockingService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -42,6 +47,22 @@ export class LoginComponent implements OnInit {
   }
 
   submitLogin() {
-    console.log(this.loginForm);
+    this.isSubmitted = true;
+
+    if (this.loginForm.invalid) return;
+
+    this.isLoading = true;
+
+    this.loginMocking.getLogin().subscribe(
+      (res: any) => {
+        localStorage.setItem('token', res.access_token);
+        localStorage.setItem('role', res.role_id);
+        console.log(res.access_token);
+        console.log(res);
+      },
+      (error) => {
+        this.onShowErrorLogin();
+      }
+    );
   }
 }
