@@ -9,6 +9,7 @@ import { Subject, takeUntil, switchMap } from 'rxjs';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
+  providers: [MessageService],
 })
 export class LoginComponent implements OnInit {
   isSubmitted: boolean = false;
