@@ -1,3 +1,5 @@
+<app-navbar></app-navbar>
+<p-toast></p-toast>
 <div class="registerContainer">
   <p-card>
     <form [formGroup]="registerForm">
@@ -5,22 +7,65 @@
         <h3>Pembuatan Akun PeBe</h3>
         <div>
           <h5>Username</h5>
-          <input type="text" pInputText formControlName="username" />
-          <!-- <input type="text" pInputText [(ngModel)]="value1" /> -->
+          <input
+            type="text"
+            pInputText
+            formControlName="username"
+            [ngClass]="{
+              'ng-invalid ng-dirty':
+                isSubmitted && registerForm.controls['username'].errors
+            }"
+          />
         </div>
+        <small
+          *ngIf="isSubmitted && registerForm.controls['username'].errors"
+          id="username"
+          class="p-error block mt-2"
+        >
+          Isi Username
+        </small>
+
         <div>
           <h5>Email</h5>
-          <input type="text" pInputText formControlName="username" />
-          <!-- <input type="text" pInputText [(ngModel)]="value1" /> -->
+          <input
+            type="text"
+            pInputText
+            formControlName="email"
+            [ngClass]="{
+              'ng-invalid ng-dirty':
+                isSubmitted && registerForm.controls['email'].errors
+            }"
+          />
         </div>
+        <small
+          *ngIf="isSubmitted && registerForm.controls['email'].errors"
+          id="email"
+          class="p-error block mt-2"
+        >
+          Isi Email
+        </small>
+
         <div>
           <h5>Nama</h5>
-          <input type="text" pInputText formControlName="username" />
-          <!-- <input type="text" pInputText [(ngModel)]="value1" /> -->
+          <input
+            type="text"
+            pInputText
+            formControlName="name"
+            [ngClass]="{
+              'ng-invalid ng-dirty':
+                isSubmitted && registerForm.controls['name'].errors
+            }"
+          />
         </div>
+        <small
+          *ngIf="isSubmitted && registerForm.controls['name'].errors"
+          id="name"
+          class="p-error block mt-2"
+        >
+          Isi Nama
+        </small>
 
         <h5>Password</h5>
-        <!-- <p-password [(ngModel)]="value3" [toggleMask]="true"></p-password> -->
         <p-password
           [toggleMask]="true"
           formControlName="password"
@@ -30,11 +75,18 @@
         <h5>Role</h5>
 
         <div class="selectContainer">
-          <select id="registerDropDown" formControlName="role">
-            <option class="dropOption" [ngValue]="1">Pemesan</option>
-            <option class="dropOption" [ngValue]="2">Pembeli</option>
+          <select id="registerDropDown" formControlName="roleId">
+            <option class="dropOption" [ngValue]="2">Pemesan</option>
+            <option class="dropOption" [ngValue]="3">Pembeli</option>
           </select>
         </div>
+        <!-- *ngIf="isSubmitted && registerForm.controls['role_id'].errors"
+        <small
+          *ngIf="isSubmitted && registerForm.controls['roleId'].errors"
+          id="roleId"
+        >
+          Isi Role User
+        </small> -->
 
         <p-button label="Submit" (click)="submitRegister()"></p-button>
       </div>

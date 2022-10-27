@@ -1,0 +1,50 @@
+{
+  "status": true,
+  "message": ["Found 7 item"],
+  "data": [
+    {
+      "id": 4,
+      "name": "item",
+      "itemDesc": "item 1",
+      "firstStock": null,
+      "stockIn": 19,
+      "entryDate": 1666342032173,
+      "enteredBy": 1,
+      "enteredName": "ADMIN",
+      "stockOut": null,
+      "outDate": null,
+      "issueBy": null,
+      "issuedName": null,
+      "lastStock": 19,
+      "stockLimit": 200,
+      "createdBy": 1,
+      "createdName": "ADMIN",
+      "createdAt": 1666342032306,
+      "updatedBy": null,
+      "updatedName": null,
+      "updatedAt": 1666342032306
+    },
+    {
+      "id": 10,
+      "name": "itemadd",
+      "itemDesc": "item add",
+      "firstStock": 0,
+      "stockIn": 10,
+      "entryDate": 1666348972052,
+      "enteredBy": 3,
+      "enteredName": "Zaenal",
+      "stockOut": null,
+      "outDate": null,
+      "issueBy": null,
+      "issuedName": null,
+      "lastStock": 10,
+      "stockLimit": 200,
+      "createdBy": 3,
+      "createdName": "Zaenal",
+      "createdAt": 1666348972053,
+      "updatedBy": null,
+      "updatedName": null,
+      "updatedAt": 1666348972053
+    }
+  ]
+}

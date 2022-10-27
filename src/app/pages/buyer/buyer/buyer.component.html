@@ -1,0 +1,140 @@
+<app-navbar></app-navbar>
+<div class="buyerPageContainer">
+  <p-tabView>
+    <p-tabPanel header="Stock Barang" leftIcon="fa-solid fa-boxes-stacked">
+      <p-table [value]="stocks" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>id</th>
+            <th>Barang</th>
+            <th>Jumlah</th>
+            <th>Batas Minimum</th>
+            <th>Di Update</th>
+            <th>Detail</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-stock>
+          <tr>
+            <td>{{ stock.id }}</td>
+            <td>{{ stock.name }}</td>
+            <td>{{ stock.stockIn }}</td>
+            <td>{{ stock.stockLimit }}</td>
+            <td>{{ stock.updatedAt }}</td>
+            <td>
+              <a routerLink="/item/{{ stock.id }}" class="detailLink">
+                <p-button
+                  icon="fa-solid fa-circle-info"
+                  iconPos="left"
+                ></p-button
+              ></a>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-tabPanel>
+
+    <p-tabPanel header="Permintaan Barang" leftIcon="fa-solid fa-list">
+      <p-table [value]="requestOrders" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>id</th>
+            <th>id Barang</th>
+            <th>Barang</th>
+            <th>Jumlah</th>
+            <th>Oleh</th>
+            <th>Tanggal Pengajuan</th>
+            <th>Detail</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-requestOrder>
+          <tr>
+            <td>{{ requestOrder.id }}</td>
+            <td>{{ requestOrder.requestOrderDetails[0].itemId }}</td>
+            <td>{{ requestOrder.requestOrderDetails[0].itemName }}</td>
+            <td>{{ requestOrder.requestOrderDetails[0].qty }}</td>
+            <td>{{ requestOrder.createdName }}</td>
+            <td>{{ requestOrder.createdAt }}</td>
+            <td>
+              <a routerLink="/request/{{ requestOrder.id }}" class="detailLink">
+                <p-button
+                  icon="fa-solid fa-circle-info"
+                  iconPos="left"
+                ></p-button
+              ></a>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-tabPanel>
+
+    <p-tabPanel header="Riwayat Pembelian" leftIcon="fa-solid fa-list">
+      <h3>Riwayat Pembelian Barang</h3>
+      <p-table [value]="requestOrders" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>id</th>
+            <th>id Barang</th>
+            <th>Barang</th>
+            <th>Jumlah</th>
+            <th>Oleh</th>
+            <th>Tanggal Pengajuan</th>
+            <th>Detail</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-requestOrder>
+          <tr>
+            <td>{{ requestOrder.id }}</td>
+            <td>{{ requestOrder.requestOrderDetails[0].itemId }}</td>
+            <td>{{ requestOrder.requestOrderDetails[0].itemName }}</td>
+            <td>{{ requestOrder.requestOrderDetails[0].qty }}</td>
+            <td>{{ requestOrder.createdName }}</td>
+            <td>{{ requestOrder.createdAt }}</td>
+            <td>
+              <a routerLink="/request/{{ requestOrder.id }}" class="detailLink">
+                <p-button
+                  icon="fa-solid fa-circle-info"
+                  iconPos="left"
+                ></p-button
+              ></a>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-tabPanel>
+
+    <p-tabPanel header="Pembelian Barang" leftIcon="fa-solid fa-store">
+      <div class="purchaseFormContainer">
+        <form [formGroup]="registerForm">
+          <div class="p-grid p-fluid">
+            <h3>Pembuatan Pembelian Barang</h3>
+            <div>
+              <h5>Pilih Item</h5>
+
+              <div class="selectContainer">
+                <select id="registerDropDown" formControlName="roleId">
+                  <option class="dropOption" [ngValue]="2">Pemesan</option>
+                  <option class="dropOption" [ngValue]="3">Pembeli</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <h5>Username</h5>
+              <input type="text" pInputText formControlName="username" />
+            </div>
+            <small
+              *ngIf="isSubmitted && registerForm.controls['username'].errors"
+              id="username"
+              class="p-error block mt-2"
+            >
+              Isi Username
+            </small>
+
+            <div class="submitButton">
+              <p-button label="Submit"></p-button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </p-tabPanel>
+  </p-tabView>
+</div>

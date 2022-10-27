@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <div class="loginContainer">
   <div class="cardContainer">
     <p-card>
@@ -14,15 +15,43 @@
           </div>
           <div>
             <h5>Username atau Email</h5>
-            <input type="text" pInputText formControlName="username" />
+            <input
+              type="text"
+              pInputText
+              formControlName="username_or_email"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  isSubmitted && loginForm.controls['username_or_email'].errors
+              }"
+            />
           </div>
+          <small
+            *ngIf="
+              isSubmitted && loginForm.controls['username_or_email'].errors
+            "
+            id="username_or_email"
+            class="p-error block mt-2"
+          >
+            Isi Username atau Email!
+          </small>
           <h5>Password</h5>
           <div class="loginPassword">
             <p-password
               [toggleMask]="true"
               formControlName="password"
               [feedback]="false"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  isSubmitted && loginForm.controls['password'].errors
+              }"
             ></p-password>
+            <small
+              *ngIf="isSubmitted && loginForm.controls['password'].errors"
+              id="password"
+              class="p-error block mt-2"
+            >
+              Input Password
+            </small>
           </div>
           <p-button label="Submit" (click)="submitLogin()"></p-button>
         </div>

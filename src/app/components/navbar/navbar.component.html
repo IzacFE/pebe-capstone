@@ -1,0 +1,27 @@
+<nav>
+  <div class="navContainer">
+    <a routerLink="/" class="logo">
+      <div class="logoContainer">
+        <h1 class="title"><i class="fa-solid fa-clipboard-list"></i>PeBe</h1>
+      </div>
+    </a>
+
+    <div class="rightNav">
+      <a
+        routerLink="/requester"
+        class="navbar-brand"
+        *ngIf="role !== 1 && role == 2"
+        ><div class="home">
+          <i class="pi pi-home"></i></div
+      ></a>
+      <a routerLink="/" class="navbar-brand" *ngIf="role !== 1 && role == 3"
+        ><div class="home">
+          <i class="pi pi-home"></i></div
+      ></a>
+      <a routerLink="/auth/login"
+        ><div class="logout" (click)="logOut()">
+          <i class="pi pi-sign-out"></i></div
+      ></a>
+    </div>
+  </div>
+</nav>
