@@ -1,11 +1,7 @@
-.loginPassword {
-  margin-bottom: 1.67em;
-}
-.registerContainer {
-  max-width: 500px;
-  margin: auto;
+.buyerPageContainer {
   margin-top: 2rem;
 }
+
 #registerDropDown {
   height: 40px;
   width: 100%;
@@ -37,4 +33,10 @@
 }
 option {
   height: 100px;
+}
+.submitButton {
+  margin-top: 2rem;
+}
+.purchaseFormContainer {
+  max-width: 500px;
 }

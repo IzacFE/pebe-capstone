@@ -3,8 +3,8 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 
-import { Subject, takeUntil, switchMap } from 'rxjs';
-import { LoginmockingService } from 'src/app/services/mocking/loginmocking.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
+// import { LoginmockingService } from 'src/app/services/mocking/loginmocking.service';
 
 @Component({
   selector: 'app-login',
@@ -17,18 +17,29 @@ export class LoginComponent implements OnInit {
   isLoading: boolean = false;
 
   loginForm: FormGroup = new FormGroup({
-    username: new FormControl('', Validators.required),
+    username_or_email: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required),
   });
-  private ngUnsubsribe: Subject<any> = new Subject();
 
   constructor(
     private router: Router,
+    private activatedRoute: ActivatedRoute,
     private messageService: MessageService,
-    private loginMocking: LoginmockingService
+    private authService: AuthService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    let role_id = localStorage.getItem('role_id');
+    if (role_id) {
+      if (+role_id == 1) {
+        this.router.navigateByUrl('/auth/register');
+      } else if (+role_id == 2) {
+        this.router.navigateByUrl('/requester');
+      } else if (+role_id == 3) {
+        this.router.navigateByUrl('/buyer');
+      }
+    }
+  }
 
   onShowErrorLogin(): void {
     this.messageService.add({
@@ -53,12 +64,30 @@ export class LoginComponent implements OnInit {
 
     this.isLoading = true;
 
-    this.loginMocking.getLogin().subscribe(
+    this.authService.httpCreateLogin(this.loginForm.value).subscribe(
       (res: any) => {
-        localStorage.setItem('token', res.access_token);
-        localStorage.setItem('role', res.role_id);
-        console.log(res.access_token);
-        console.log(res);
+        if (res) {
+          const token: string = res.access_token;
+          const role: number = res.role_id;
+          localStorage.setItem('access_token', token);
+          localStorage.setItem('role_id', role + '');
+
+          this.onShowSuccessLogin();
+
+          setTimeout(() => {
+            this.isSubmitted = false;
+            this.isLoading = false;
+            if (role == 1) {
+              this.router.navigateByUrl('/auth/signup');
+            } else if (role == 2) {
+              this.router.navigateByUrl('/requester');
+            } else if (role == 3) {
+              this.router.navigateByUrl('/buyer');
+            }
+          }, 1000);
+        } else {
+          this.onShowErrorLogin();
+        }
       },
       (error) => {
         this.onShowErrorLogin();
