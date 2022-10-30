@@ -1,8 +1,36 @@
 <app-navbar></app-navbar>
+<p-dialog
+  header="Detail Barang"
+  [(visible)]="modalDisplay"
+  [style]="{ width: '600px' }"
+  [baseZIndex]="10000"
+>
+  <div *ngIf="modalStatus == 'stock'">
+    <p>
+      Id Barang : {{ stockItemDetail.id }}
+      <br />
+      <br />
+      Nama Barang : {{ stockItemDetail.name }}
+      <br />
+      <br />
+      Deskripsi Barang: <br />
+      {{ stockItemDetail.itemDesc }}
+      <br />
+      <br />
+      Jumlah Stock Barang : {{ stockItemDetail.stockLimit }}
+      <br />
+      <br />
+      Batas Minimum Stock Barang : {{ stockItemDetail.stockIn }}
+    </p>
+  </div>
+  <div *ngIf="modalStatus == 'request'">
+    {{ requestItemDetail | json }}
+  </div>
+</p-dialog>
 <div class="buyerPageContainer">
   <p-tabView>
     <p-tabPanel header="Stock Barang" leftIcon="fa-solid fa-boxes-stacked">
-      <p-table [value]="stocks" responsiveLayout="scroll">
+      <p-table [value]="stockListResult.data.content" responsiveLayout="scroll">
         <ng-template pTemplate="header">
           <tr>
             <th>id</th>
@@ -21,28 +49,34 @@
             <td>{{ stock.stockLimit }}</td>
             <td>{{ stock.updatedAt }}</td>
             <td>
-              <a routerLink="/item/{{ stock.id }}" class="detailLink">
-                <p-button
-                  icon="fa-solid fa-circle-info"
-                  iconPos="left"
-                ></p-button
-              ></a>
+              <p-button
+                icon="fa-solid fa-circle-info"
+                iconPos="left"
+                (click)="showStockItemDetail(stock, 'stock')"
+              ></p-button>
             </td>
           </tr>
         </ng-template>
       </p-table>
+      <p-paginator
+        *ngIf="!stockListLoading"
+        [rows]="10"
+        [totalRecords]="stockListResult.data.totalPages * 10"
+        (pageLinkSize)="(3)"
+        (onPageChange)="paginate($event)"
+      ></p-paginator>
     </p-tabPanel>
 
     <p-tabPanel header="Permintaan Barang" leftIcon="fa-solid fa-list">
-      <p-table [value]="requestOrders" responsiveLayout="scroll">
+      <p-table [value]="requestListResult.data" responsiveLayout="scroll">
         <ng-template pTemplate="header">
           <tr>
             <th>id</th>
             <th>id Barang</th>
-            <th>Barang</th>
             <th>Jumlah</th>
             <th>Oleh</th>
             <th>Tanggal Pengajuan</th>
+            <th>Status</th>
             <th>Detail</th>
           </tr>
         </ng-template>
@@ -50,17 +84,16 @@
           <tr>
             <td>{{ requestOrder.id }}</td>
             <td>{{ requestOrder.requestOrderDetails[0].itemId }}</td>
-            <td>{{ requestOrder.requestOrderDetails[0].itemName }}</td>
             <td>{{ requestOrder.requestOrderDetails[0].qty }}</td>
             <td>{{ requestOrder.createdName }}</td>
+            <td>{{ requestOrder.status }}</td>
             <td>{{ requestOrder.createdAt }}</td>
             <td>
-              <a routerLink="/request/{{ requestOrder.id }}" class="detailLink">
-                <p-button
-                  icon="fa-solid fa-circle-info"
-                  iconPos="left"
-                ></p-button
-              ></a>
+              <p-button
+                icon="fa-solid fa-circle-info"
+                iconPos="left"
+                (click)="showStockItemDetail(requestOrder, 'request')"
+              ></p-button>
             </td>
           </tr>
         </ng-template>
@@ -69,33 +102,31 @@
 
     <p-tabPanel header="Riwayat Pembelian" leftIcon="fa-solid fa-list">
       <h3>Riwayat Pembelian Barang</h3>
-      <p-table [value]="requestOrders" responsiveLayout="scroll">
+      <p-table
+        [value]="purchaseListResult.data.content"
+        responsiveLayout="scroll"
+      >
         <ng-template pTemplate="header">
           <tr>
             <th>id</th>
-            <th>id Barang</th>
-            <th>Barang</th>
-            <th>Jumlah</th>
-            <th>Oleh</th>
-            <th>Tanggal Pengajuan</th>
+            <th>Nama Barang</th>
+            <th>Harga Barang</th>
+            <th>Tanggal Pembelian</th>
             <th>Detail</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-requestOrder>
+        <ng-template pTemplate="body" let-purchaseOrder>
           <tr>
-            <td>{{ requestOrder.id }}</td>
-            <td>{{ requestOrder.requestOrderDetails[0].itemId }}</td>
-            <td>{{ requestOrder.requestOrderDetails[0].itemName }}</td>
-            <td>{{ requestOrder.requestOrderDetails[0].qty }}</td>
-            <td>{{ requestOrder.createdName }}</td>
-            <td>{{ requestOrder.createdAt }}</td>
+            <td>{{ purchaseOrder.itemId }}</td>
+            <td>{{ purchaseOrder.itemName }}</td>
+            <td>{{ purchaseOrder.Price }}</td>
+            <td>{{ purchaseOrder.purchaseDate }}</td>
             <td>
-              <a routerLink="/request/{{ requestOrder.id }}" class="detailLink">
-                <p-button
-                  icon="fa-solid fa-circle-info"
-                  iconPos="left"
-                ></p-button
-              ></a>
+              <p-button
+                icon="fa-solid fa-circle-info"
+                iconPos="left"
+                (click)="showStockItemDetail(purchaseOrder, 'request')"
+              ></p-button>
             </td>
           </tr>
         </ng-template>
@@ -103,8 +134,8 @@
     </p-tabPanel>
 
     <p-tabPanel header="Pembelian Barang" leftIcon="fa-solid fa-store">
-      <div class="purchaseFormContainer">
-        <form [formGroup]="registerForm">
+      <!-- <div class="purchaseFormContainer">
+        <form [formGroup]="purchaseForm">
           <div class="p-grid p-fluid">
             <h3>Pembuatan Pembelian Barang</h3>
             <div>
@@ -118,23 +149,26 @@
               </div>
             </div>
             <div>
-              <h5>Username</h5>
+              <h5>Deskripsi Pembelian</h5>
               <input type="text" pInputText formControlName="username" />
             </div>
-            <small
-              *ngIf="isSubmitted && registerForm.controls['username'].errors"
-              id="username"
-              class="p-error block mt-2"
-            >
-              Isi Username
-            </small>
+
+            <div>
+              <h5>Jumlah Barang</h5>
+              <input type="number" pInputText />
+            </div>
+
+            <div>
+              <h5>Harga Barang</h5>
+              <input type="number" pInputText />
+            </div>
 
             <div class="submitButton">
               <p-button label="Submit"></p-button>
             </div>
           </div>
         </form>
-      </div>
+      </div> -->
     </p-tabPanel>
   </p-tabView>
 </div>

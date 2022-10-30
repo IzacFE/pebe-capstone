@@ -24,6 +24,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { BuyerComponent } from './pages/buyer/buyer/buyer.component';
 import { RequesterComponent } from './pages/requester/requester/requester.component';
 import { TabViewModule } from 'primeng/tabview';
+import { DialogModule } from 'primeng/dialog';
+import { PaginatorModule } from 'primeng/paginator';
 
 @NgModule({
   declarations: [
@@ -52,6 +54,8 @@ import { TabViewModule } from 'primeng/tabview';
     TableModule,
     CommonModule,
     TabViewModule,
+    DialogModule,
+    PaginatorModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

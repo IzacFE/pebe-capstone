@@ -1,1 +1,156 @@
-<p>requester works!</p>
+<app-navbar></app-navbar>
+<p-dialog
+  header="Detail Barang"
+  [(visible)]="modalDisplay"
+  [style]="{ width: '600px' }"
+  [baseZIndex]="10000"
+>
+  <div *ngIf="modalStatus == 'stock'">
+    <p>
+      Id Barang : {{ stockItemDetail.id }}
+      <br />
+      <br />
+      Nama Barang : {{ stockItemDetail.name }}
+      <br />
+      <br />
+      Deskripsi Barang: <br />
+      {{ stockItemDetail.itemDesc }}
+      <br />
+      <br />
+      Jumlah Stock Barang : {{ stockItemDetail.stockLimit }}
+      <br />
+      <br />
+      Batas Minimum Stock Barang : {{ stockItemDetail.stockIn }}
+    </p>
+  </div>
+  <div *ngIf="modalStatus == 'request'">
+    {{ requestItemDetail | json }}
+  </div>
+</p-dialog>
+<div class="requesterPageContainer">
+  <p-tabView>
+    <p-tabPanel header="Stock Barang" leftIcon="fa-solid fa-boxes-stacked">
+      <p-table [value]="stockListResult.data.content" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>id</th>
+            <th>Nama Barang</th>
+            <th>Jumlah Stock</th>
+            <th>Batas Minimum</th>
+            <th>Di Update</th>
+            <th>Detail</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-stock>
+          <tr>
+            <td>{{ stock.id }}</td>
+            <td>{{ stock.name }}</td>
+            <td>{{ stock.stockIn }}</td>
+            <td>{{ stock.stockLimit }}</td>
+            <td>{{ stock.updatedAt }}</td>
+            <td>
+              <p-button
+                icon="fa-solid fa-circle-info"
+                iconPos="left"
+                (click)="showStockItemDetail(stock, 'stock')"
+              ></p-button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <p-paginator
+        *ngIf="!stockListLoading"
+        [rows]="10"
+        [totalRecords]="stockListResult.data.totalPages * 10"
+        (pageLinkSize)="(3)"
+        (onPageChange)="paginate($event)"
+      ></p-paginator>
+    </p-tabPanel>
+    <p-tabPanel header="List Permintaan" leftIcon="fa-solid fa-list">
+      <p-table
+        [value]="requestListResult.data.content"
+        responsiveLayout="scroll"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>id</th>
+            <th>Dibuat Oleh</th>
+            <th>Dibuat Tanggal</th>
+            <th>Diupdate Tanggal</th>
+            <th>Status</th>
+            <th>Detail</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-requestOrder>
+          <tr>
+            <td>{{ requestOrder.id }}</td>
+            <td>{{ requestOrder.createdName }}</td>
+            <td>{{ requestOrder.createdAt }}</td>
+            <td>{{ requestOrder.updatedAt }}</td>
+            <td>{{ requestOrder.status }}</td>
+
+            <td>
+              <p-button
+                icon="fa-solid fa-circle-info"
+                iconPos="left"
+                (click)="showStockItemDetail(requestOrder, 'request')"
+              ></p-button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-tabPanel>
+    <p-tabPanel header="Pembuatan Permintaan" leftIcon="fa-solid fa-store">
+      <div class="createRequestContainer">
+        <form [formGroup]="requestForm">
+          <div class="p-grid p-fluid">
+            <h3>Pembuatan Permintaan Barang</h3>
+            <!-- <div>
+              <h5>Pilih Item</h5>
+
+              <div class="selectContainer">
+                <select id="registerDropDown" formControlName="roleId">
+                  <option class="dropOption" [ngValue]="2">Pemesan</option>
+                  <option class="dropOption" [ngValue]="3">Pembeli</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <h5>Deskripsi Pembelian</h5>
+              <input type="text" pInputText formControlName="username" />
+            </div> -->
+            <div>
+              <h5>Catatan</h5>
+              <input type="text" pInputText formControlName="notes" />
+            </div>
+
+            <div>
+              <h5>Jumlah Barang</h5>
+              <input type="number" pInputText />
+            </div>
+
+            <div
+              formArrayName="requestOrderDetails"
+              *ngFor="
+                let item of requestOrderDetailsControl.controls;
+                let i = index
+              "
+            >
+              <div [formGroupName]="i">
+                <input type="number" formControlName="itemId" />
+                <input type="text" formControlName="itemName" />
+                <input type="text" formControlName="itemDesc" />
+                <input type="number" formControlName="qty" />
+              </div>
+            </div>
+            <pre>{{ requestForm.value | json }}</pre>
+
+            <div class="submitButton">
+              <p-button label="Submit"></p-button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </p-tabPanel>
+  </p-tabView>
+</div>

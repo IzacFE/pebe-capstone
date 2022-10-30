@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   isLoading: boolean = false;
 
   loginForm: FormGroup = new FormGroup({
-    username_or_email: new FormControl('', Validators.required),
+    usernameOrEmail: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required),
   });
 
@@ -29,13 +29,13 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    let role_id = localStorage.getItem('role_id');
-    if (role_id) {
-      if (+role_id == 1) {
+    let roleId = localStorage.getItem('roleId');
+    if (roleId) {
+      if (+roleId == 1) {
         this.router.navigateByUrl('/auth/register');
-      } else if (+role_id == 2) {
+      } else if (+roleId == 2) {
         this.router.navigateByUrl('/requester');
-      } else if (+role_id == 3) {
+      } else if (+roleId == 3) {
         this.router.navigateByUrl('/buyer');
       }
     }
@@ -67,10 +67,10 @@ export class LoginComponent implements OnInit {
     this.authService.httpCreateLogin(this.loginForm.value).subscribe(
       (res: any) => {
         if (res) {
-          const token: string = res.access_token;
-          const role: number = res.role_id;
-          localStorage.setItem('access_token', token);
-          localStorage.setItem('role_id', role + '');
+          const token: string = res.accessToken;
+          const role: number = res.roleId;
+          localStorage.setItem('accessToken', token);
+          localStorage.setItem('roleId', role + '');
 
           this.onShowSuccessLogin();
 

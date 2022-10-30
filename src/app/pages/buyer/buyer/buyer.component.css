@@ -40,3 +40,6 @@ option {
 .purchaseFormContainer {
   max-width: 500px;
 }
+.detailLink {
+  text-decoration: none;
+}
