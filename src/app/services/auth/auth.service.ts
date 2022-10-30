@@ -1,23 +1,14 @@
 import { HttpClient } from '@angular/common/http';
-import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ILoginRequest, IRegisterRequest } from 'src/app/models/IAuth';
-import { environment } from 'src/environments/environment';
-
-const httpOptions: any = {
-  headers: new HttpHeaders({
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Origin': '*',
-  }),
-};
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private signinUrl: string = `${environment.baseUrl}/auth/signin`;
-  private signupUrl: string = `${environment.baseUrl}/auth/signup`;
+  private signinUrl: string = `http://localhost:8080/auth/signin`;
+  private signupUrl: string = `http://localhost:8080/auth/signup`;
 
   constructor(private http: HttpClient) {}
 
@@ -27,7 +18,7 @@ export class AuthService {
 
   httpCreateRegister(body: IRegisterRequest): Observable<Object> {
     const headers = {
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
     };
 
     return this.http.post(this.signupUrl, body, { headers });

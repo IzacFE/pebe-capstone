@@ -18,18 +18,16 @@
             <input
               type="text"
               pInputText
-              formControlName="username_or_email"
+              formControlName="usernameOrEmail"
               [ngClass]="{
                 'ng-invalid ng-dirty':
-                  isSubmitted && loginForm.controls['username_or_email'].errors
+                  isSubmitted && loginForm.controls['usernameOrEmail'].errors
               }"
             />
           </div>
           <small
-            *ngIf="
-              isSubmitted && loginForm.controls['username_or_email'].errors
-            "
-            id="username_or_email"
+            *ngIf="isSubmitted && loginForm.controls['usernameOrEmail'].errors"
+            id="usernameOrEmail"
             class="p-error block mt-2"
           >
             Isi Username atau Email!

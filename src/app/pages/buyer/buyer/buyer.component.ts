@@ -1,6 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormGroup, Validators, FormControl } from '@angular/forms';
+import {
+  FormGroup,
+  Validators,
+  FormControl,
+  FormBuilder,
+  FormArray,
+} from '@angular/forms';
+import { BuyerService } from 'src/app/services/buyer/buyer.service';
 
 @Component({
   selector: 'app-buyer',
@@ -10,244 +17,121 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
 export class BuyerComponent implements OnInit {
   isSubmitted: boolean = false;
   isLoading: boolean = false;
+  public modalStatus: string = '';
+  public purchaseForm: FormGroup = new FormGroup({});
+  public modalDisplay: boolean = false;
 
-  stocks: any[] = [
-    {
-      id: 4,
-      name: 'item',
-      itemDesc: 'item 1',
-      firstStock: null,
-      stockIn: 19,
-      entryDate: 1666342032173,
-      enteredBy: 1,
-      enteredName: 'ADMIN',
-      stockOut: null,
-      outDate: null,
-      issueBy: null,
-      issuedName: null,
-      lastStock: 19,
-      stockLimit: 200,
-      createdBy: 1,
-      createdName: 'ADMIN',
-      createdAt: 1666342032306,
-      updatedBy: null,
-      updatedName: null,
-      updatedAt: 1666342032306,
-    },
-    {
-      id: 10,
-      name: 'itemadd',
-      itemDesc: 'item add',
-      firstStock: 0,
-      stockIn: 10,
-      entryDate: 1666348972052,
-      enteredBy: 3,
-      enteredName: 'Zaenal',
-      stockOut: null,
-      outDate: null,
-      issueBy: null,
-      issuedName: null,
-      lastStock: 10,
-      stockLimit: 200,
-      createdBy: 3,
-      createdName: 'Zaenal',
-      createdAt: 1666348972053,
-      updatedBy: null,
-      updatedName: null,
-      updatedAt: 1666348972053,
-    },
-    {
-      id: 10,
-      name: 'itemadd',
-      itemDesc: 'item add',
-      firstStock: 0,
-      stockIn: 10,
-      entryDate: 1666348972052,
-      enteredBy: 3,
-      enteredName: 'Zaenal',
-      stockOut: null,
-      outDate: null,
-      issueBy: null,
-      issuedName: null,
-      lastStock: 10,
-      stockLimit: 200,
-      createdBy: 3,
-      createdName: 'Zaenal',
-      createdAt: 1666348972053,
-      updatedBy: null,
-      updatedName: null,
-      updatedAt: 1666348972053,
-    },
+  public stockListResult: any = {};
+  public stockListTotalPage: any;
+  public stockListPageNumber: number = 1;
+  public stockListLoading: boolean = false;
+  public stockItemDetail: any = {};
 
-    {
-      id: 10,
-      name: 'itemadd',
-      itemDesc: 'item add',
-      firstStock: 0,
-      stockIn: 10,
-      entryDate: 1666348972052,
-      enteredBy: 3,
-      enteredName: 'Zaenal',
-      stockOut: null,
-      outDate: null,
-      issueBy: null,
-      issuedName: null,
-      lastStock: 10,
-      stockLimit: 200,
-      createdBy: 3,
-      createdName: 'Zaenal',
-      createdAt: 1666348972053,
-      updatedBy: null,
-      updatedName: null,
-      updatedAt: 1666348972053,
-    },
-    {
-      id: 10,
-      name: 'itemadd',
-      itemDesc: 'item add',
-      firstStock: 0,
-      stockIn: 10,
-      entryDate: 1666348972052,
-      enteredBy: 3,
-      enteredName: 'Zaenal',
-      stockOut: null,
-      outDate: null,
-      issueBy: null,
-      issuedName: null,
-      lastStock: 10,
-      stockLimit: 200,
-      createdBy: 3,
-      createdName: 'Zaenal',
-      createdAt: 1666348972053,
-      updatedBy: null,
-      updatedName: null,
-      updatedAt: 1666348972053,
-    },
-    {
-      id: 10,
-      name: 'itemadd',
-      itemDesc: 'item add',
-      firstStock: 0,
-      stockIn: 10,
-      entryDate: 1666348972052,
-      enteredBy: 3,
-      enteredName: 'Zaenal',
-      stockOut: null,
-      outDate: null,
-      issueBy: null,
-      issuedName: null,
-      lastStock: 10,
-      stockLimit: 200,
-      createdBy: 3,
-      createdName: 'Zaenal',
-      createdAt: 1666348972053,
-      updatedBy: null,
-      updatedName: null,
-      updatedAt: 1666348972053,
-    },
-  ];
+  public requestListResult: any = {};
+  public requestListLoading: boolean = false;
+  public displayrequestItemDetail: boolean = false;
+  public requestItemDetail: any = {};
 
-  requestOrders: any[] = [
-    {
-      id: 1,
-      requestOrderDetails: [
-        {
-          id: 3,
-          itemId: 8,
-          itemName: 'saus',
-          itemDesc: 'item add',
-          qty: 77,
-        },
-      ],
-      status: 'REQUEST',
-      note: '',
-      createdBy: 4,
-      createdName: 'rachamn',
-      createdAt: 1666513900398,
-      updatedBy: null,
-      updatedName: null,
-      updateAt: null,
-    },
-    {
-      id: 2,
-      requestOrderDetails: [
-        {
-          id: 3,
-          itemId: 8,
-          itemName: 'kecap',
-          itemDesc: 'item add',
-          qty: 77,
-        },
-      ],
-      status: 'REQUEST',
-      note: '',
-      createdBy: 4,
-      createdName: 'rachamn',
-      createdAt: 1666513900398,
-      updatedBy: null,
-      updatedName: null,
-      updateAt: null,
-    },
-    {
-      id: 3,
-      requestOrderDetails: [
-        {
-          id: 3,
-          itemId: 8,
-          itemName: 'shampoo',
-          itemDesc: 'item add',
-          qty: 77,
-        },
-      ],
-      status: 'REQUEST',
-      note: '',
-      createdBy: 4,
-      createdName: 'rachamn',
-      createdAt: 1666513900398,
-      updatedBy: null,
-      updatedName: null,
-      updateAt: null,
-    },
-    {
-      id: 4,
-      requestOrderDetails: [
-        {
-          id: 3,
-          itemId: 8,
-          itemName: 'pasta gigi',
-          itemDesc: 'item add',
-          qty: 77,
-        },
-      ],
-      status: 'REQUEST',
-      note: '',
-      createdBy: 4,
-      createdName: 'rachamn',
-      createdAt: 1666513900398,
-      updatedBy: null,
-      updatedName: null,
-      updateAt: null,
-    },
-  ];
+  public purchaseListResult: any = {};
+  public purchaseListLoading: boolean = false;
+  public displaypurchaseItemDetail: boolean = false;
+  public purchaseItemDetail: any = {};
 
-  registerForm: FormGroup = new FormGroup({
-    username: new FormControl('', Validators.required),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    name: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.required),
-    roleId: new FormControl('', Validators.required),
-  });
-
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private buyerService: BuyerService,
+    private formBuilder: FormBuilder
+  ) {}
 
   ngOnInit(): void {
-    let role_id = localStorage.getItem('role_id');
-    if (role_id) {
-      if (+role_id == 1) {
+    let roleId = localStorage.getItem('roleId');
+    if (roleId) {
+      if (+roleId == 1) {
         this.router.navigateByUrl('/auth/register');
-      } else if (+role_id == 2) {
+      } else if (+roleId == 2) {
         this.router.navigateByUrl('/requester');
       }
     }
+
+    this.purchaseForm = new FormGroup({
+      note: new FormControl('a', Validators.required),
+      requestOrderDetails: this.formBuilder.array([this.nestedArray()]),
+    });
+
+    this.stockListLoading = true;
+    this.buyerService.httpGetAllStock(1).subscribe(
+      (data) => {
+        this.stockListResult = data;
+        this.stockListLoading = false;
+      },
+      (error) => {
+        console.log(error);
+        this.stockListLoading = false;
+      }
+    );
+
+    this.requestListLoading = true;
+    this.buyerService.httpGetAllRequestOrder().subscribe(
+      (data: any) => {
+        this.requestListResult = data;
+        this.requestListLoading = false;
+        console.log(this.requestListResult);
+      },
+      (error) => {
+        console.log(error);
+        this.requestListLoading = false;
+      }
+    );
+
+    this.purchaseListLoading = true;
+    this.buyerService.httpPurchaseHistory().subscribe(
+      (data: any) => {
+        this.purchaseListResult = data;
+        this.purchaseListLoading = false;
+        console.log(this.purchaseListResult);
+      },
+      (error) => {
+        console.log(error);
+        this.purchaseListLoading = false;
+      }
+    );
+  }
+
+  paginate(event: any) {
+    this.stockListLoading = true;
+    this.buyerService.httpGetAllStock(event.pageCount).subscribe(
+      (data) => {
+        this.stockListResult = data;
+        this.stockListLoading = false;
+      },
+      (error) => {
+        console.log(error);
+        this.stockListLoading = false;
+      }
+    );
+  }
+
+  showStockItemDetail(data: any, target: string) {
+    this.modalStatus = target;
+    if (target == 'stock') {
+      this.stockItemDetail = data;
+    } else if (target == 'request') {
+      this.requestItemDetail = data;
+      console.log(this.requestItemDetail);
+    }
+    this.modalDisplay = true;
+  }
+
+  nestedArray() {
+    return this.formBuilder.group({
+      itemId: [1, Validators.required],
+      itemName: ['a', Validators.required],
+      itemDesc: ['a', Validators.required],
+      qty: [1, Validators.required],
+    });
+  }
+
+  get requestOrderDetailsControl(): FormArray {
+    return this.purchaseForm.get('requestOrderDetails') as FormArray;
   }
 }
