@@ -80,17 +80,8 @@
             <option class="dropOption" [ngValue]="3">Pembeli</option>
           </select>
         </div>
-        <!-- *ngIf="isSubmitted && registerForm.controls['role_id'].errors"
-        <small
-          *ngIf="isSubmitted && registerForm.controls['roleId'].errors"
-          id="roleId"
-        >
-          Isi Role User
-        </small> -->
 
-        <!-- <p-button label="check" (click)="onCheck()"></p-button> -->
         <p-button label="Submit" (click)="submitRegister()"></p-button>
-        <pre>{{ registerForm.value | json }}</pre>
       </div>
     </form>
   </p-card>
