@@ -1,4 +1,5 @@
 <app-navbar></app-navbar>
+<p-toast></p-toast>
 <p-dialog
   header="Detail Barang"
   [(visible)]="modalDisplay"
@@ -24,7 +25,19 @@
     </p>
   </div>
   <div *ngIf="modalStatus == 'request'">
-    {{ requestItemDetail | json }}
+    <p>
+      Id Permintaan : {{ requestItemDetail.id }}
+      <br />
+      <br />
+      Catatan Permintaan : {{ requestItemDetail.note }}
+      <br />
+      <br />
+      List Barang: <br />
+      <span *ngFor="let item of requestItemDetail.requestOrderDetails"
+        >Barang ID {{ item.itemId }} dengan jumlah : {{ item.qty }} unit <br
+      /></span>
+      <br />
+    </p>
   </div>
 </p-dialog>
 <div class="requesterPageContainer">
@@ -87,7 +100,15 @@
             <td>{{ requestOrder.createdName }}</td>
             <td>{{ requestOrder.createdAt }}</td>
             <td>{{ requestOrder.updatedAt }}</td>
-            <td>{{ requestOrder.status }}</td>
+            <td>
+              <span *ngIf="requestOrder.status == 'DONE'">Selesai</span>
+              <span *ngIf="requestOrder.status == 'ON_PROGRESS'"
+                >Proses Pembelian</span
+              >
+              <span *ngIf="requestOrder.status == 'REQUEST'"
+                >Sedang Diajukan</span
+              >
+            </td>
 
             <td>
               <p-button
@@ -104,29 +125,9 @@
       <div class="createRequestContainer">
         <form [formGroup]="requestForm">
           <div class="p-grid p-fluid">
-            <h3>Pembuatan Permintaan Barang</h3>
-            <!-- <div>
-              <h5>Pilih Item</h5>
-
-              <div class="selectContainer">
-                <select id="registerDropDown" formControlName="roleId">
-                  <option class="dropOption" [ngValue]="2">Pemesan</option>
-                  <option class="dropOption" [ngValue]="3">Pembeli</option>
-                </select>
-              </div>
-            </div>
             <div>
               <h5>Deskripsi Pembelian</h5>
-              <input type="text" pInputText formControlName="username" />
-            </div> -->
-            <div>
-              <h5>Catatan</h5>
-              <input type="text" pInputText formControlName="notes" />
-            </div>
-
-            <div>
-              <h5>Jumlah Barang</h5>
-              <input type="number" pInputText />
+              <input type="text" pInputText formControlName="note" />
             </div>
 
             <div
@@ -137,16 +138,34 @@
               "
             >
               <div [formGroupName]="i">
-                <input type="number" formControlName="itemId" />
-                <input type="text" formControlName="itemName" />
-                <input type="text" formControlName="itemDesc" />
-                <input type="number" formControlName="qty" />
+                <div class="selectContainer">
+                  <h5>Pilih Barang</h5>
+                  <select id="registerDropDown" formControlName="itemId">
+                    <option value="" disabled selected>Nama Barang</option>
+                    <option
+                      class="dropOption"
+                      *ngFor="let item of listItem.data.content"
+                      [ngValue]="item.id"
+                    >
+                      {{ item.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <h5>Jumlah Barang</h5>
+
+                <p-inputNumber
+                  formControlName="qty"
+                  [showButtons]="true"
+                  inputId="minmax-buttons"
+                  [min]="1"
+                >
+                </p-inputNumber>
               </div>
             </div>
-            <pre>{{ requestForm.value | json }}</pre>
 
             <div class="submitButton">
-              <p-button label="Submit"></p-button>
+              <p-button label="Submit" (click)="submitRequest()"></p-button>
             </div>
           </div>
         </form>
