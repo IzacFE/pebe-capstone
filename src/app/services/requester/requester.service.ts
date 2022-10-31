@@ -10,6 +10,16 @@ export class RequesterService {
 
   constructor(private http: HttpClient) {}
 
+  httpItemList(): Observable<Object> {
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    };
+
+    return this.http.get(`${this.baseUrl}/items`, {
+      headers,
+    });
+  }
+
   httpGetAllStock(page: any): Observable<Object> {
     const headers = {
       Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
